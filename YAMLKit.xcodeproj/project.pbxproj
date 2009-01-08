@@ -372,6 +372,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -407,7 +408,10 @@
 		1DEB91B308733DA50010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(NATIVE_ARCH)";
+				ARCHS = (
+					x86_64,
+					"$(NATIVE_ARCH)",
+				);
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_ENABLE_OBJC_GC = supported;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
@@ -417,6 +421,7 @@
 				LIBRARY_SEARCH_PATHS = /usr/local/lib/;
 				PREBINDING = NO;
 				SDKROOT = macosx10.5;
+				VALID_ARCHS = x86_64;
 			};
 			name = Release;
 		};

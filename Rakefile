@@ -1,6 +1,11 @@
 desc "Default task is YAMLKit:build"
 task :default => "YAMLKit:build"
 
+desc "Clean builds and ext sources"
+task :clean do
+  sh "rm -rf build ext"
+end
+
 namespace :libYAML do
   LIB_YAML_VERSION = "0.1.2"
   URL = "http://pyyaml.org/download/libyaml/yaml-#{LIB_YAML_VERSION}.tar.gz"
@@ -16,7 +21,7 @@ namespace :libYAML do
   
   desc "Builds libYAML"
   task :build => :fetch do
-    sh "cd ext/#{DIR} && ./configure && make"
+    sh "cd ext/#{DIR} && CFLAGS='-arch x86_64' ./configure && make"
   end
   
   desc "Installs libYAML in /usr/local"
