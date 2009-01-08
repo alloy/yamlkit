@@ -35,11 +35,16 @@ namespace :YAMLKit do
   
   desc "Builds YAMLKit"
   task :build do
-    sh "xcodebuild -configuration Release"
+    sh "xcodebuild -target YAMLKit -configuration Release"
   end
   
   desc "Installs YAMLKit in #{INSTALL_DIR}"
   task :install do
     sh "cp -R build/Release/YAMLKit.framework #{INSTALL_DIR}"
+  end
+  
+  desc "Run the YAMLKit test suite"
+  task :test do
+    sh "xcodebuild -target 'Run Tests' -configuration Release"
   end
 end
