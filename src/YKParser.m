@@ -83,6 +83,7 @@
       obj = [NSString stringWithUTF8String:(const char *)event.data.scalar.value];
       NSLog(obj);
       
+      NSLog([NSString stringWithUTF8String:event.data.scalar.tag]);
       if(event.data.scalar.tag == YAML_TIMESTAMP_TAG) {
         NSLog(@"Timestamp");
       }
