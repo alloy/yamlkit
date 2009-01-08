@@ -22,7 +22,7 @@ class TestYAML < Test::Unit::TestCase
     assert_equal({ 'given' => 'Dorothy', 'family' => 'Gale' }, result['customer'])
     assert_equal 'Oz-Ware Purchase Invoice', result['receipt']
     
-    #assert_instance_of Date, result['date']
+    assert_instance_of Date, result['date']
     assert_equal '2007-08-06', result['date'].to_s
   end
 end
