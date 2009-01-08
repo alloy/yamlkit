@@ -81,6 +81,11 @@
   switch(event.type) {
     case YAML_SCALAR_EVENT:
       obj = [NSString stringWithUTF8String:(const char *)event.data.scalar.value];
+      NSLog(obj);
+      
+      if(event.data.scalar.tag == YAML_TIMESTAMP_TAG) {
+        NSLog(@"Timestamp");
+      }
       
       if((event.data.scalar.style == YAML_PLAIN_SCALAR_STYLE) && [self castsNumericScalars]) {
         NSScanner *scanner = [NSScanner scannerWithString:obj];
@@ -91,6 +96,8 @@
       }
       
       temp = [stack lastObject];
+      // NSLog([[temp class] description]);
+      
       if([temp isKindOfClass:[NSArray class]]) {
         [temp addObject:obj];
       } else if([temp isKindOfClass:[NSDictionary class]]) {
@@ -104,10 +111,12 @@
             e = [self _constructErrorFromParser:NULL];
           }
         } else {
+          // NSLog(@"re-adding");
           // Is it correct that the object need to go back into the stack so they
           // can be turned into a dictionary in the YAML_MAPPING_END_EVENT step?
-          [stack addObject:temp];
-          [stack addObject:obj];
+          // [stack addObject:temp];
+          // [stack addObject:obj];
+          [[stack lastObject] setObject:obj forKey:temp];
         }
       } else {
         
@@ -124,6 +133,9 @@
     
     case YAML_SEQUENCE_END_EVENT:
     case YAML_MAPPING_END_EVENT:
+      // NSLog(@"At end");
+      // NSLog([stack description]);
+      
       // TODO: Check for retain count errors.
       temp = [stack lastObject];
       [stack removeLastObject];
