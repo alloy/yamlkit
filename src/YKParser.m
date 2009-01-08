@@ -82,8 +82,6 @@
     case YAML_SCALAR_EVENT:
       obj = [NSString stringWithUTF8String:(const char *)event.data.scalar.value];
       
-      // NSLog(obj);
-      
       if((event.data.scalar.style == YAML_PLAIN_SCALAR_STYLE) && [self castsNumericScalars]) {
         NSScanner *scanner = [NSScanner scannerWithString:obj];
         if([scanner scanInt:NULL]) {
@@ -93,7 +91,6 @@
       }
       
       temp = [stack lastObject];
-      
       if([temp isKindOfClass:[NSArray class]]) {
         [temp addObject:obj];
       } else if([temp isKindOfClass:[NSDictionary class]]) {
@@ -106,6 +103,11 @@
           if(e != NULL) {
             e = [self _constructErrorFromParser:NULL];
           }
+        } else {
+          // Is it correct that the object need to go back into the stack so they
+          // can be turned into a dictionary in the YAML_MAPPING_END_EVENT step?
+          [stack addObject:temp];
+          [stack addObject:obj];
         }
       } else {
         
