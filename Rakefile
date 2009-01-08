@@ -1,3 +1,5 @@
+require 'rake/testtask'
+
 desc "Default task is YAMLKit:build"
 task :default => "YAMLKit:build"
 
@@ -46,5 +48,21 @@ namespace :YAMLKit do
   desc "Run the YAMLKit test suite"
   task :test do
     sh "xcodebuild -target 'Run Tests' -configuration Release"
+  end
+end
+
+namespace :macruby do
+  if defined?(MACRUBY_VERSION)
+    Rake::TestTask.new do |t|
+      t.libs << "macruby/lib"
+      t.test_files = FileList['macruby/test/*test.rb']
+      t.verbose = false
+    end
+  else
+    desc 'Run tests'
+    task :test do
+      puts "WARNING: Next time use macrake to run the macruby tests\n\n"
+      sh "macrake macruby:test"
+    end
   end
 end
