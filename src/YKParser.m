@@ -82,6 +82,8 @@
     case YAML_SCALAR_EVENT:
       obj = [NSString stringWithUTF8String:(const char *)event.data.scalar.value];
       
+      // NSLog(obj);
+      
       if((event.data.scalar.style == YAML_PLAIN_SCALAR_STYLE) && [self castsNumericScalars]) {
         NSScanner *scanner = [NSScanner scannerWithString:obj];
         if([scanner scanInt:NULL]) {
@@ -99,6 +101,7 @@
       } else if([temp isKindOfClass:[NSString class]] || [temp isKindOfClass:[NSValue class]])  {
         [temp retain];
         [stack removeLastObject];
+        
         if(![[stack lastObject] isKindOfClass:[NSMutableDictionary class]]){
           if(e != NULL) {
             e = [self _constructErrorFromParser:NULL];
