@@ -17,12 +17,11 @@ class TestYAML < Test::Unit::TestCase
   
   it "loads a more elaborate file with YAML.load_file" do
     result = YAML.load_file(fixture('moderate.yaml'))
-    #p result
     
-    assert_equal({ 'given' => 'Dorothy', 'family' => 'Gale' }, result['customer'])
     assert_equal 'Oz-Ware Purchase Invoice', result['receipt']
-    
+    assert_equal 1, result['id']
     assert_instance_of Date, result['date']
     assert_equal '2007-08-06', result['date'].to_s
+    assert_equal({ 'given' => 'Dorothy', 'family' => 'Gale' }, result['customer'])
   end
 end

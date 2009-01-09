@@ -1,3 +1,5 @@
+require 'date'
+
 module YAML
   class << self
     def load(string)
@@ -12,11 +14,52 @@ module YAML
     
     def parser
       parser = YKParser.alloc.init
+      parser.castsNumericScalars = false # for now
+      
       if yield(parser) == 1
-        parser.parse.first
+        cast_elements(parser.parse.first)
       else
         raise "oops"
       end
+    end
+    
+    def cast_elements(enumerable)
+      case enumerable
+      when Hash then cast_hash_elements(enumerable)
+      when Array then cast_array_elements(enumerable)
+      end
+    end
+    
+    def cast_hash_elements(hash)
+      hash.each { |key, value| hash[key] = cast(value) }
+      hash
+    end
+    
+    def cast_array_elements(array)
+      array.map { |element| cast(element) }
+    end
+    
+    def cast(object)
+      if object.is_a?(Hash)
+        cast_hash_elements(object)
+      elsif int = cast_integer(object)
+        int
+      elsif date = cast_date(object)
+        date
+      else
+        object
+      end
+    end
+    
+    def cast_integer(object)
+      int = object.to_i if object.respond_to?(:to_i)
+      int if int && int.to_s == object
+    end
+    
+    def cast_date(object)
+      Date.parse(object)
+    rescue ArgumentError
+      nil
     end
   end
 end
