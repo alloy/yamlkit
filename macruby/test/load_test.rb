@@ -4,6 +4,33 @@ require File.expand_path('../test_helper', __FILE__)
 
 # These tests should probably move to the macruby part of rubyspec once we get to that point.
 
+class TestYAMLCasting < Test::Unit::TestCase
+  include YAML::Casting
+  
+  it "casts an Integer" do
+    assert_equal 1, cast('1')
+    assert_equal 1000_000, cast('1000000')
+  end
+  
+  it "casts to nil if not a valid Integer" do
+    assert_nil cast_integer('foo')
+    assert_nil cast_integer('')
+  end
+  
+  it "casts a Date" do
+    assert_equal Date.parse('2007-08-06'), cast('2007-08-06')
+  end
+  
+  it "casts a DateTime" do
+    assert_equal DateTime.parse('2007-08-06 01:02:03'), cast('2007-08-06 01:02:03')
+  end
+  
+  it "casts to nil if not a valid Date or DateTime" do
+    assert_nil cast_date('2007-08')
+    assert_nil cast_date('2008')
+  end
+end
+
 class TestYAML < Test::Unit::TestCase
   it "loads a string with YAML.load" do
     assert_equal %w{ foo bar baz }, YAML.load("- foo\n- bar\n- baz")
