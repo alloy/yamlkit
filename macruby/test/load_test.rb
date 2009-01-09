@@ -12,9 +12,13 @@ class TestYAMLCasting < Test::Unit::TestCase
     assert_equal 1000_000, cast('1000000')
   end
   
-  it "casts to nil if not a valid Integer" do
-    assert_nil cast_integer('foo')
-    assert_nil cast_integer('')
+  it "casts a Float" do
+    assert_equal 123.123, cast('123.123')
+  end
+  
+  it "casts to nil if not a valid Numeric" do
+    assert_nil cast_numeric('foo')
+    assert_nil cast_numeric('')
   end
   
   it "casts a Date" do
@@ -28,6 +32,19 @@ class TestYAMLCasting < Test::Unit::TestCase
   it "casts to nil if not a valid Date or DateTime" do
     assert_nil cast_date('2007-08')
     assert_nil cast_date('2008')
+  end
+  
+  it "casts to TrueClass" do
+    assert_equal true, cast('true')
+  end
+  
+  it "casts to FalseClass" do
+    assert_equal false, cast('false')
+  end
+  
+  it "casts to nil if not `true' or `false'" do
+    assert_nil cast_bool('foo')
+    assert_nil cast_bool('')
   end
 end
 

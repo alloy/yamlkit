@@ -46,18 +46,32 @@ module YAML
     def cast(object)
       if object.is_a?(Hash)
         cast_hash_elements(object)
-      elsif int = cast_integer(object)
-        int
+      elsif numeric = cast_numeric(object)
+        numeric
       elsif date = cast_date(object)
         date
+      elsif !(bool = cast_bool(object)).nil?
+        bool
       else
         object
       end
     end
     
-    def cast_integer(object)
-      int = object.to_i if object.respond_to?(:to_i)
-      int if int && int.to_s == object
+    def cast_numeric(object)
+      return nil unless object.respond_to?(:to_i)
+      if (numeric = object.to_i).to_s == object
+        numeric
+      elsif (numeric = object.to_f).to_s == object
+        numeric
+      end
+    end
+    
+    def cast_bool(object)
+      if object == 'true'
+        true
+      elsif object == 'false'
+        false
+      end
     end
     
     # Returns either a Date, DateTime object or nil if invalid.
